@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes([
+	'register' => env('ALLOW_REGISTER', false)
+]);
 
 Route::get('/', 'HomeController@index');
+Route::get('auth/logout', 'HomeController@logout');
 
 Route::resource('customers', 'CustomersController');
 Route::post('customers/{id}/activate', 'CustomersController@activate');
@@ -43,8 +46,6 @@ Route::resource('cotizations', 'CotizationsController');
 Route::post('cotizations/{id}/cancel', 'CotizationsController@cancel');
 Route::post('cotizations/{id}/save_payment', 'CotizationsController@save_payment');
 Route::get('cotizations/{id}/print_pdf', 'CotizationsController@print_pdf');
-
-Route::resource('statuses', 'StatusesController');
 
 Route::resource('vendor_prices', 'VendorPricesController');
 
