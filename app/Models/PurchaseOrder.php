@@ -14,12 +14,12 @@ class PurchaseOrder extends Model
 
 	public function purchase_order_details()
 	{
-		return $this->hasMany('App\PurchaseOrderDetail');
+		return $this->hasMany('App\Models\PurchaseOrderDetail');
 	}
 
 	public function vendor()
 	{
-		return $this->belongsTo('App\Vendor');
+		return $this->belongsTo('App\Models\Vendor');
 	}
 
 	public function purchase_payments()
