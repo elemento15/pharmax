@@ -40,4 +40,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function getShortName()
+    {
+        $name = explode(' ', $this->name);
+        
+        if (count($name) > 1) {
+            return $name[0].' '.$name[1];
+        } else {
+            return $name[0];
+        }
+    }
+
 }
