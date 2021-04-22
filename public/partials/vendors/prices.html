@@ -1,0 +1,137 @@
+<div class="container-fluid">
+	<h3 class="cls-title">Precios por Proveedor</h3>
+
+	<!-- Vendor Info -->
+	<div class="row">
+		<div class="col-sm-2">
+			<span>Proveedor:</span>
+		</div>
+		<div class="col-sm-7">
+			<a href="#/vendors-edit/{{ vendor.id }}">
+				<b>{{ vendor.name }}</b> - <i>{{ vendor.rfc }}</i>
+			</a>
+		</div>
+		<div class="col-sm-3 text-right">
+			<a class="btn btn-default btn-sm" href="#/vendors">
+				<span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> Proveedores
+			</a>
+		</div>
+	</div>
+
+	<!-- Product add form -->
+	<h5 class="cls-title">Productos</h5>
+
+	<form class="form-inline cls-form-detail">
+		<div class="form-group">
+			<input type="text" class="form-control" ng-model="product.code" ng-keypress="searchCode($event);" placeholder="Código" maxlength="20" style="width:100px">
+		</div>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Descripción" style="width:250px" 
+				ng-model="product.description" 
+				ng-keypress="searchDescription($event);">
+		</div>
+		<div class="form-group input-group input-group-sm">
+			<span class="input-group-addon">$</span>
+			<input type="number" class="form-control" placeholder="Precio" title="Precio" style="width:85px" 
+				ng-model="product.price" 
+				ng-change="getTotalProduct()" 
+				ng-keypress="setFocus($event, 'add')">
+		</div>
+		<button class="btn btn-success btn-xs" id="btnAddProduct" ng-click="addProduct()" title="Agregar Producto">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+		</button>
+		<button class="btn btn-info btn-xs" id="btnOpenSearch" ng-click="openSearch()" title="Abrir Búsqueda">
+			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+		</button>
+		<button class="btn btn-warning btn-xs" id="btnClear" ng-click="clearProduct(); focusCode();" title="Limpiar Captura">
+			<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+		</button>
+	</form>
+
+	<!-- Products List -->
+	<table class="table table-condensed table-bordered cls-table">
+		<thead>
+			<tr>
+				<th>Código</th>
+				<th>Descripción</th>
+				<th width="100">Precio</th>
+				<th width="70">Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="(key, rec) in list">
+				<td>
+					<div style="line-height: 22px;">{{ rec.code  }}</div>
+				</td>
+				<td>
+					<div class="cls-small"><i> {{ rec.description }}</i></div>
+				</td>
+				<td align="right">
+					<div ng-hide="rec.editing" ng-dblclick="editPrice(rec)">
+						{{ rec.price | currency }}
+					</div>
+					<div ng-if="rec.editing" class="cls-form-detail">
+						<input type="number" class="form-control" 
+							ng-model="input_price" 
+							ng-blur="endEditDetail(rec, $event)" 
+							ng-keypress="keyPressPrice($event)" 
+							ng-model-options="{updateOn : 'change blur'}">
+					</div>
+				</td>
+				<td align="center">
+					<div class="cls-actions">
+						<button class="btn btn-danger btn-xs" ng-click="deleteProduct(rec.id)">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- paginator -->
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="row" style="padding: 5px;">
+				<!-- order options -->
+				<div class="col-sm-6">
+					<div class="form-inline">
+						<div class="form-group">
+							<label>Ordenar:</label>
+							<select class="form-control" ng-model="orderBy" ng-change="searchData()">
+								<option value="C">Codigo</option>
+								<option value="D">Descripción</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- search input -->
+				<div class="col-sm-6">
+					<input type="text" class="form-control" placeholder="Buscar productos" ng-model="search" ng-change="searchData()" ng-model-options="{updateOn : 'change blur'}">
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-4">
+			<nav class="cls-pagination">
+				<ul class="pagination">
+					<li ng-click="paginate('first')">
+						<span aria-hidden="true">&laquo; &laquo;</span>
+					</li>
+					<li ng-click="paginate('previous')">
+						<span aria-hidden="true">&laquo;</span>
+					</li>-
+					<li><span>{{ pageInfo }}</span></li>
+					<li ng-click="paginate('next')">
+						<span aria-hidden="true">&raquo;</span>
+					</li>
+					<li ng-click="paginate('last')">
+						<span aria-hidden="true">&raquo; &raquo;</span>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+</div>

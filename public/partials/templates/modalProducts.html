@@ -1,0 +1,55 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Busqueda de Productos</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="row cls-toolbar">
+        <!-- search input -->
+        <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Buscar" ng-model="$ctrl.search" ng-change="$ctrl.searchData()" ng-model-options="{updateOn : 'change blur'}">
+        </div>
+    </div>
+
+    <table class="table table-bordered table-condensed cls-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in $ctrl.products" 
+                ng-click="$ctrl.setSelection(product)" 
+                ng-dblclick="$ctrl.ok()" 
+                ng-class="{ info : product.id == $ctrl.selectedId }">
+                <td>{{ product.code }}</td>
+                <td>{{ product.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <nav class="cls-pagination">
+                <ul class="pagination">
+                    <li ng-click="$ctrl.paginate('first')">
+                        <span aria-hidden="true">&laquo; &laquo;</span>
+                    </li>
+                    <li ng-click="$ctrl.paginate('previous')">
+                        <span aria-hidden="true">&laquo;</span>
+                    </li>-
+                    <li><span>{{ $ctrl.pageInfo }}</span></li>
+                    <li ng-click="$ctrl.paginate('next')">
+                        <span aria-hidden="true">&raquo;</span>
+                    </li>
+                    <li ng-click="$ctrl.paginate('last')">
+                        <span aria-hidden="true">&raquo; &raquo;</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Seleccionar</button>
+    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cerrar</button>
+</div>

@@ -1,0 +1,215 @@
+<div class="container-fluid">
+	<h3 class="cls-title">{{title}}</h3>
+
+	<form class="row">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label>Nombre:</label>
+						<input type="text" class="form-control" name="name" ng-model="data.name" autocomplete="off">
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label>RFC:</label>
+						<input type="text" class="form-control" name="rfc" ng-model="data.rfc" 
+						       placeholder="XAXX010101XXX" maxlength="13" autocomplete="off">
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Contacto:</label>
+						<input type="text" class="form-control" name="contact" ng-model="data.contact" autocomplete="off">
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Email:</label>
+						<input type="text" class="form-control" name="email" ng-model="data.email" placeholder="nombre@example.com" autocomplete="off">
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Teléfono:</label>
+						<input type="text" class="form-control" name="phone" ng-model="data.phone" maxlength="20" autocomplete="off">
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Celular:</label>
+						<input type="text" class="form-control" name="mobile" ng-model="data.mobile" maxlength="20" autocomplete="off">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label>Dirección:</label>
+				<input type="text" class="form-control" name="address" ng-model="data.address" autocomplete="off">
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Condiciones de Crédito:</label>
+						<input type="text" class="form-control" name="credit_conditions" ng-model="data.credit_conditions" autocomplete="off">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label>Comentarios:</label>
+				<textarea class="form-control" rows="3" ng-model="data.comments"></textarea>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-7">
+							<button class="btn btn-sm btn-primary" ng-click="save()">Guardar</button>
+							<a class="btn btn-sm btn-warning" href="#/vendors">Cerrar</a>
+							<a class="btn btn-sm btn-info" href="#/vendors-prices/{{data.id}}">Ver Precios</a>
+						</div>
+						<div class="col-xs-5">
+							<div class="text-danger text-right cls-balance">Saldo: {{ data.balance | currency }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<br>
+		</div>
+
+		<div class="col-sm-6" ng-show="data.id">
+			<!-- Purchase Orders -->
+			<div class="row">
+				<div class="col-xs-6">
+					<h4 class="text-muted">Ordenes de Compra</h4>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-inline pull-right" style="margin-top:5px;">
+						<div class="form-group-sm">
+							<select class="form-control" ng-model="ordersFilters.status" ng-change="getOrders()">
+								<option value="">(Todas)</option>
+								<option value="N">Nuevas</option>
+								<option value="P">Pagadas</option>
+								<option value="C">Canceladas</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<table class="table table-condensed table-bordered cls-table" style="margin-bottom: 2px;">
+				<thead>
+					<tr>
+						<th class="text-center" width="60">ID</th>
+						<th class="text-center" width="100">Fecha</th>
+						<th class="text-center">Total</th>
+						<th class="text-center">Saldo</th>
+						<th class="text-center" width="82">Estado</th>
+						<th class="text-center" width="38">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, item) in orderList"
+					    ng-click="selectOrder(key)"
+					    ng-class="{ info : key == selOrderIndex }">
+						<td class="text-right">
+							<a href="/purchase_orders/{{ item.id }}/print_pdf" target="_blank">
+								<b>{{ item.id }}</b>
+							</a>
+						</td>
+						<td class="text-center">{{ item.purchase_date.substr(0, 10) }}</div>
+						</td>
+						<td class="text-right">{{ item.total | currency }}</td>
+						<td class="text-right">
+							<div class="text-muted cls-small" ng-hide="item.balance">{{ item.balance | currency }}</div>
+							<div class="text-danger" ng-show="item.balance">{{ item.balance | currency }}</div>
+						</td>
+						<td class="text-center">
+							<span class="label label-info" ng-show="item.status == 'N'">Nueva</span>
+							<span class="label label-danger" ng-show="item.status == 'C'">Cancelada</span>
+							<span class="label label-success" ng-show="item.status == 'P'">Pagada</span>
+						</td>
+						<td>
+							<div class="cls-actions">
+								<button class="btn btn-xs btn-warning" ng-click="openPaymentModal(item)" 
+								        ng-show="item.status == 'N'"
+								        title="Agregar abono">+$</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- paginator -->
+			<div class="row">
+				<div class="col-sm-12">
+					<nav class="cls-pagination">
+						<ul class="pagination">
+							<li ng-click="paginateOrder('first')">
+								<span aria-hidden="true">&laquo; &laquo;</span>
+							</li>
+							<li ng-click="paginateOrder('previous')">
+								<span aria-hidden="true">&laquo;</span>
+							</li>
+							<li><span>{{ pageOrderInfo }}</span></li>
+							<li ng-click="paginateOrder('next')">
+								<span aria-hidden="true">&raquo;</span>
+							</li>
+							<li ng-click="paginateOrder('last')">
+								<span aria-hidden="true">&raquo; &raquo;</span>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<!-- Payments -->
+			<h4 class="text-muted">Abonos</h4>
+
+			<table class="table table-condensed table-bordered cls-table">
+				<thead>
+					<tr>
+						<th class="text-center" width="60">ID</th>
+						<th class="text-center">Fecha</th>
+						<th class="text-center">Importe</th>
+						<th class="text-center">Tipo</th>
+						<th class="text-center" width="80">Estado</th>
+						<th class="text-center" width="38">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, item) in orderList[selOrderIndex].purchase_payments">
+						<td class="text-right">{{ item.payment.id }}</td>
+						<td class="text-center">
+							<div class="cls-small">{{ item.payment.payment_date.substr(0, 10) }}</div>
+						</td>
+						<td class="text-right">{{ item.amount | currency }}</td>
+						<td class="text-center">
+							<div class="cls-small">{{ item.payment.type.name }}</div>
+						</td>
+						<td class="text-center">
+							<span class="label label-default" ng-show="item.payment.active">Activo</span>
+							<span class="label label-danger" ng-hide="item.payment.active">Cancelado</span>
+						</td>
+						<td>
+							<div class="cls-actions">
+								<button class="btn btn-xs btn-danger" ng-click="cancelPayment(item.payment)"
+								        ng-show="item.payment.active" title="Cancelar abono"><b>&nbsp;X&nbsp;</b></button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</form>
+</div>

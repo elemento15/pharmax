@@ -1,0 +1,40 @@
+<div class="container-fluid">
+	<h3 class="cls-title">Historial de Productos</h3>
+
+	<form class="row">
+		<div class="col-sm-6">
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label>Proveedor:</label>
+				<ui-select ng-model="data.vendor">
+				    <ui-select-match placeholder="Seleccione un Proveedor">
+				        <span ng-bind="$select.selected.name"></span>
+				    </ui-select-match>
+				    <ui-select-choices repeat="item in (vendorsList | filter: $select.search) track by item.id">
+				        <span ng-bind="item.name"></span>
+				        <div class="cls-small"><i>{{ item.rfc }}</i></div>
+				    </ui-select-choices>
+				</ui-select>
+			</div>
+
+			<div class="form-group" style="margin-bottom: 5px;">
+				<label>Producto:</label>
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Producto" 
+					       ng-model="product.description"
+					       ng-keypress="keyPressProduct($event)" 
+					       ng-change="searchProduct()" 
+					       ng-model-options="{updateOn: 'blur'}">
+					<span class="input-group-btn">
+						<button class="btn btn-info" ng-click="openSearchProduct()">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<button class="btn btn-primary" ng-click="printReport()">Imprimir</button>
+		</div>
+	</form>		
+
+	
+</div>

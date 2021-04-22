@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Cambio de Status</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <p>Seleccione el status a asignar</p>
+
+    <div class="text-center">
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-primary" 
+                ng-repeat="item in $ctrl.statusList" 
+                ng-click="$ctrl.setStatus(item)">{{ item.name }}
+            </button>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Aceptar</button>
+    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cerrar</button>
+</div>

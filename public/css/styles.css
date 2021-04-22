@@ -1,0 +1,162 @@
+body {
+	background-color: #F5F5F5;
+}
+
+/*a, div, input, button {
+	font-size: 13px;
+}
+
+nav.navbar a.navbar-brand {
+	font-size: 16px;
+}
+
+nav.navbar ul a {
+	font-size: 14px;
+}*/
+
+.cls-main-container {
+	margin-top: 53px;
+}
+
+.cls-toolbar {
+	padding: 5px 0px;
+}
+
+.cls-toolbar-gray {
+	background-color: #EEEEEE;
+	padding: 5px 0px;
+}
+
+textarea {
+	resize: none;
+}
+
+h3.cls-title {
+	color: #5D88C3;
+	margin: 10px 0px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #5D88C3;
+	font-size: 20px;
+}
+
+h5.cls-title {
+	color: #5D88C3;
+	margin: 10px 0px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #5D88C3;
+	font-size: 16px;
+}
+
+table.cls-table, form {
+	font-size: 13px;
+}
+
+table.cls-table thead tr {
+	background-color: #CCCCCC;
+}
+
+table.cls-table tbody td {
+	line-height: 16px;
+	height: 33px;
+}
+
+table.cls-table tbody tr:hover {
+	background-color: #DDE4FF;
+}
+
+table.cls-table tr td .cls-actions {
+	display: none;
+}
+
+table.cls-table tr:hover td .cls-actions {
+	padding: 0px;
+	display: block;
+}
+
+.cls-actions .btn-xs {
+	font-size: 11px;
+}
+
+table td .cls-small {
+	font-size: 12px;
+	line-height: 16px;
+	color: #666;
+}
+
+table td .cls-xsmall {
+	font-size: 11px;
+	line-height: 16px;
+	color: #999;
+}
+
+table td .cls-small-collapsed {
+	line-height: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+nav.cls-pagination {
+	text-align: right;
+}
+
+ul.pagination {
+	cursor: pointer;
+	margin: 5px 0px;
+}
+
+.cls-pointer {
+	cursor: pointer;
+}
+
+/*.cls-small {
+	font-size: 12px;
+}*/
+
+.cls-form-detail {
+	margin: 6px 0px;
+}
+
+.cls-form-detail input {
+	font-size: 13px;
+	padding: 5px;
+	height: 28px;
+}
+
+.cls-total-amount {
+	font-size: 16px;
+	color: #696ce8;
+}
+
+
+.cls-info-header {
+	font-size: 14px;
+	font-weight: bold;
+	background-color: #ccc;
+	padding: 5px;
+	text-align: center;
+	margin-bottom: 5px;
+	border-radius: 5px;
+}
+
+.cls-info-compare {
+	margin-bottom: 10px;
+	background-color: #eaeaea;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #d2d2d2;
+}
+
+.cls-info-compare.active {
+	background-color: #dff0d8;
+}
+
+.cls-info-compare .cls-title {
+	font-size: 14px;
+	color: #5d88c3;
+}
+
+.cls-balance {
+	font-size: 16px;
+	font-weight: bold;
+	margin-top: 5px;
+}
