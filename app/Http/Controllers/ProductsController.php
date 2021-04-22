@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Response;
 use Illuminate\Http\Request;
+use App\Services\ProductHistoryPdf;
 
 use App\Models\Product;
 use App\Models\Vendor;

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Response;
 use Illuminate\Http\Request;
+use App\Services\CotizationPdf;
 
 use App\Models\Cotization;
 use App\Models\CotizationDetail;
