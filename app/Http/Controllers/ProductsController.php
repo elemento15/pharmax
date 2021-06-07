@@ -14,7 +14,7 @@ class ProductsController extends AppController
     protected $mainModel = 'App\Models\Product';
 
     // params needen for index
-    protected $searchFields = ['description', 'code'];
+    protected $searchFields = ['description', 'code', 'sat_code'];
     protected $indexPaginate = 10;
     protected $indexJoins = [];
     protected $orderBy = ['field' => 'description', 'type' => 'ASC'];
@@ -25,7 +25,9 @@ class ProductsController extends AppController
     // params needed for store/update
     protected $defaultNulls = ['code'];
     protected $formRules = [
-        'description'  => 'required'
+        'description'  => 'required',
+        'code' => 'nullable|unique:products,code,{{id}}',
+        'sat_code' => 'nullable|unique:products,sat_code,{{id}}',
     ];
 
     protected $allowDelete = true;
