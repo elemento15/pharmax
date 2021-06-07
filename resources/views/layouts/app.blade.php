@@ -23,6 +23,7 @@
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/angular-toastr.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/angular-confirm.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/angular-busy.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/ui-bootstrap-2.5.0-csp.css" />
         <link rel="stylesheet" type="text/css" href="/css/select.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/styles.css" />
@@ -31,6 +32,7 @@
         <script src="/libs/bootstrap.min.js"></script>
         <script src="/libs/angular.min.js"></script>
         <script src="/libs/angular-route.min.js"></script>
+        <script src="/libs/angular-busy.min.js"></script>
         <!-- https://github.com/Foxandxss/angular-toastr -->
         <script src="/libs/angular-toastr.tpls.min.js"></script>
         <!-- https://craftpip.github.io/angular-confirm/ -->

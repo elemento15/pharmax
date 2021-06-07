@@ -16,7 +16,7 @@ app.controller('ProductsCompareController', function ($scope, $http, $route, $lo
 	$scope.pageInfo = '1/1';
 
 	$scope.read = function () {
-		ProductService.rpt_compare({
+		$scope.loading = ProductService.rpt_compare({
 			page: pagination.page,
 			search: $scope.search,
 			order: $scope.orderBy

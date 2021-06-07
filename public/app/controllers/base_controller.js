@@ -27,19 +27,25 @@ function BaseController($scope, $route, $location, $ngConfirm, ModelService, toa
 		var data = me.validation()
 		
 		if (data) {
-			ModelService.save(data)
+			$scope.loading = ModelService.save(data)
 				.success(function(response) {
 					toastr.success('Registro guardado');
 					$location.path(index);
 				})
 				.error(function(response) {
-					toastr.error(response.msg || 'Error en el servidor');
+					if (response.errors) {
+						response.errors.forEach(function (item) {
+							toastr.error(item);
+						});
+					} else {
+						toastr.error(response.msg || 'Error en el servidor');
+					}
 				});
 		}
 	}
 
 	$scope.read = function () {
-		ModelService.read({
+		$scope.loading = ModelService.read({
 			page: pagination.page,
 			filters: $scope.mapFilters(),
 			search: $scope.search
@@ -61,7 +67,7 @@ function BaseController($scope, $route, $location, $ngConfirm, ModelService, toa
 					text: 'Aceptar',
 					btnClass: 'btn-red',
 					action: function () {
-						ModelService.delete({
+						$scope.loading = ModelService.delete({
 							id: id
 						}).success(function (response) {
 							toastr.warning('Registro eliminado');
@@ -83,7 +89,7 @@ function BaseController($scope, $route, $location, $ngConfirm, ModelService, toa
 		$scope.data.id = id;
 		$scope.title = me.title.edit || 'Editar Registro';
 		
-		ModelService.get({
+		$scope.loading = ModelService.get({
 			id : id
 		}).success(function(response) {
 			$scope.data = response;

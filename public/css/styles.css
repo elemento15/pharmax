@@ -160,3 +160,18 @@ ul.pagination {
 	font-weight: bold;
 	margin-top: 5px;
 }
+
+/* overriding cg-busy styles */
+.cg-busy-backdrop {
+	background-color: #000000;
+	opacity: .2;
+}
+
+.cg-busy-default-sign {
+	border-radius: 7px;
+}
+
+.cg-busy-default-wrapper {
+	top: 40% !important;
+}
+/* ------------------------  */

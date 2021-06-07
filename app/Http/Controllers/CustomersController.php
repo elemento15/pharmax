@@ -21,7 +21,9 @@ class CustomersController extends AppController
     protected $defaultNulls = ['rfc'];
     protected $formRules = [
         'name'  => 'required',
-        'email' => 'email'
+        'email' => 'email|nullable',
+        'rfc' => 'required|unique:customers,rfc,{{id}}|min:12|max:13',
+
     ];
 
     protected $allowDelete = true;

@@ -43,6 +43,10 @@ class CotizationsController extends AppController
         $subtotal = 0;
         $iva_amount = 0;
         $total = 0;
+
+        if (! count($request->cotization_details)) {
+            return Response::json(array('msg' => 'Agregue partidas'), 500);
+        }
         
         try {
             $cotization = new Cotization;

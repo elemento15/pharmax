@@ -23,7 +23,8 @@ class VendorsController extends AppController
     protected $defaultNulls = ['rfc'];
     protected $formRules = [
         'name'  => 'required',
-        'email' => 'email'
+        'email' => 'email|nullable',
+        'rfc' => 'required|unique:vendors,rfc,{{id}}|min:12|max:13',
     ];
 
     protected $allowDelete = true;

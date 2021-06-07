@@ -1,4 +1,4 @@
-var app = angular.module('mainApp', ['ngRoute', 'ui.bootstrap', 'ui.select', 'toastr', 'cp.ngConfirm']);
+var app = angular.module('mainApp', ['ngRoute', 'ui.bootstrap', 'ui.select', 'toastr', 'cp.ngConfirm', 'cgBusy']);
 
 app.config(function ($routeProvider, $provide, toastrConfig) {
 	angular.extend(toastrConfig, {
@@ -130,4 +130,10 @@ app.directive('stringToNumber', function() {
 			});
 		}
 	}
+});
+
+// overrride cg-busy defaults
+app.value('cgBusyDefaults',{
+	message: 'Espere un momento',
+	//minDuration: 10000
 });

@@ -81,16 +81,25 @@ class AppController extends Controller
      */
     public function store(Request $request)
     {
+        $this->request = $request;
+        
         $mainModel = $this->mainModel;
 
         foreach ($this->defaultNulls as $item) {
             $request[$item] = ($request[$item] == '') ? null : $request[$item];
         }
 
-        try {
-            return $mainModel::create($request->all());
-        } catch (Exception $e) {
-            return Response::json(array('msg' => 'Error al guardar'), 500);
+        $rules = $this->parseFormRules(0);
+        $validator = Validator::make($this->request->all(), $rules);
+
+        if ($validator->fails()) {
+            return Response::json(array('errors' => $validator->errors()->all()), 422);
+        } else {
+            try {
+                return $mainModel::create($request->all());
+            } catch (Exception $e) {
+                return Response::json(array('msg' => 'Error al guardar'), 500);
+            }
         }
     }
 
@@ -225,5 +234,17 @@ class AppController extends Controller
         } else {
             return Response::json(array('msg' => 'Error al desactivar'), 500);
         }
+    }
+
+
+    protected function parseFormRules($id)
+    {
+        $rules = [];
+        
+        foreach ($this->formRules as $key => $rule) {
+            $rules[$key] = str_replace('{{id}}', $id, $rule);
+        }
+
+        return $rules;
     }
 }
