@@ -26,7 +26,7 @@ class ProductsController extends AppController
     protected $defaultNulls = ['code'];
     protected $formRules = [
         'description'  => 'required',
-        'code' => 'nullable|unique:products,code,{{id}}',
+        //'code' => 'nullable|unique:products,code,{{id}}',
         //'sat_code' => 'nullable|unique:products,sat_code,{{id}}',
     ];
 
