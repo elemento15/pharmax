@@ -27,7 +27,7 @@ class ProductsController extends AppController
     protected $formRules = [
         'description'  => 'required',
         'code' => 'nullable|unique:products,code,{{id}}',
-        'sat_code' => 'nullable|unique:products,sat_code,{{id}}',
+        //'sat_code' => 'nullable|unique:products,sat_code,{{id}}',
     ];
 
     protected $allowDelete = true;
