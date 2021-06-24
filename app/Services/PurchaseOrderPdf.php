@@ -23,53 +23,61 @@ class PurchaseOrderPdf extends Fpdf {
         $order = $this->order;
         $vendor = $order->vendor()->first();
 
-        $this->SetFont('Arial', 'B', 10);
-        $this->Cell(40, 8, substr($order->order_date, 0, 10), $border, 0);
+        $this->SetFont('Arial', 'B', 14);
+        $this->Cell(0, 8, 'Orden de Compra', $border, 1, 'C');
 
-        $this->SetFont('Arial', 'B', 16);
-        $this->Cell(110, 8, 'Orden de Compra', $border, 0, 'C');
-        
-        $this->SetFont('Arial', 'B', 10);
-        $this->Cell(20, 8, 'Folio: ', $border, 0, 'R');
-
-        $this->SetFont('Arial', 'B', 10);
+        $this->SetFont('Arial', '', 9);
+        $this->Cell(15, 4, 'Folio:', $border, 0, '');
         $this->SetTextColor(200, 0, 0);
-        $this->Cell(0, 8, str_pad((string)$order->id, 7, "0", STR_PAD_LEFT), $border, 1, 'R');
-        
-        $this->Ln(3);
+        $this->SetFont('Arial', 'B', 10);
+        $this->Cell(20, 4, str_pad((string)$order->id, 7, "0", STR_PAD_LEFT), $border, 0, '');
         $this->SetTextColor(0, 0, 0);
-        $this->SetFont('Arial', '', 10);
+        $this->SetFont('Arial', '', 8);
+        $this->Cell(107, 4, '', $border, 0, '');
+        $this->Cell(19, 4, 'Elaboración:', $border, 0, 'R');
+        $this->Cell(0, 4, $this->formatDate($order->order_date), $border, 1, 'R');
 
-        $name_rfc = $vendor->name;
-        $name_rfc.= ($vendor->rfc) ? ' ('.$vendor->rfc.')' : '';
+        $this->Cell(142, 4, '', $border, 0, '');
+        $this->Cell(19, 4, 'Impresión:', $border, 0, 'R');
+        $this->Cell(0, 4, $this->formatDate(date('Y-m-d H:i:s')), $border, 1, 'R');
+        
+        $this->Ln(1);
+
+        $this->Cell(16, 4, 'Proveedor:', $border, 0, '');
+        $this->Cell(96, 4, $vendor->name, $border, 0, '');
+        $this->SetFont('Arial', 'B', 7);
+        $this->Cell(0, 4, 'DATOS DE FACTURACIÓN:', $border, 1, '');
+        $this->SetFont('Arial', '', 8);
+
+        $this->Cell(16, 4, 'Contacto:', $border, 0, '');
+        $this->Cell(96, 4, $vendor->contact, $border, 0, '');
+        $this->Cell(0, 4, 'CIRUGIA PLASTICA DEL SIGLO XXI S.A.P.I. DE C.V.', $border, 1, '');
+
+        $this->Cell(16, 4, 'Teléfonos:', $border, 0, '');
+        $this->Cell(96, 4, $vendor->phone.' / '.$vendor->mobile, $border, 0, '');
+        $this->SetFont('Arial', 'B', 8);
+        $this->Cell(0, 4, 'R.F.C. CPS110412TP0', $border, 1, '');
+        $this->SetFont('Arial', '', 8);
+
+        $this->Cell(16, 4, 'Email:', $border, 0, '');
+        $this->Cell(96, 4, $vendor->email, $border, 0, '');
+        $this->Cell(0, 4, 'AV. VERONA 7412 FRACC. VILLA VERONA', $border, 1, '');
+
+        $this->Cell(112, 4, '', $border, 0, '');
+        $this->Cell(0, 4, 'C.P. 45019 ZAPOPAN, JALISCO.  TEL: 36077700', $border, 1, '');
+
+        $this->Ln(1);
         
 
-        $phone = ($vendor->phone) ? $vendor->phone : '';
-        if ($vendor->mobile) {
-            $phone = ($phone) ? $phone.' - '.$vendor->mobile : $vendor->mobile;
-        }
-
-        $this->Cell(20, 6, 'Proveedor: ', $border, 0);
-        $this->Cell(0,  6, $name_rfc, 'B', 1);
-        
-        $this->Cell(20, 6, 'Contacto: ', $border, 0);
-        $this->Cell(80, 6,  $vendor->contact, 'B', 0);
-        $this->Cell(18, 6, ' Teléfono: ', $border, 0);
-        $this->Cell(0,  6,  $phone, 'B', 1);
-
-        $this->Cell(20, 6, 'Dirección: ', $border, 0);
-        $this->Cell(0,  6, $vendor->address, 'B', 1);
-        
-        $this->Ln(5);
-        $this->SetFont('Arial', 'B', 9);
+        $this->SetFont('Arial', 'B', 8);
         $border = 'B';
 
-        $this->Cell(18, 5, 'Cantidad', $border, 0, 'C');
-        $this->Cell(40, 5, 'Código', $border, 0, 'L');
-        $this->Cell(90, 5, 'Descripción', $border, 0, 'L');
-        $this->Cell(21, 5, 'Precio', $border, 0, 'C');
-        $this->Cell(21, 5, 'Total', $border, 0, 'C');
-        $this->Cell(0,  5, '', $border, 1);
+        $this->Cell(12, 4, 'Cant.', $border, 0, 'C');
+        $this->Cell(25, 4, 'Clave', $border, 0, 'L');
+        $this->Cell(117, 4, 'Descripción', $border, 0, 'L');
+        $this->Cell(16, 4, 'Precio', $border, 0, 'C');
+        $this->Cell(20, 4, 'Importe', $border, 0, 'C');
+        $this->Cell(0,  4, '', $border, 1);
     }
 
     public function printPdf()
@@ -81,16 +89,16 @@ class PurchaseOrderPdf extends Fpdf {
         $this->AddPage();
         
         // print details
-        $this->SetFont('Helvetica', '', 9);
+        $this->SetFont('Helvetica', '', 8);
         $this->SetFillColor(230, 230, 230);
         
         $details = $order->purchase_order_details()->get();
         foreach ($details as $item) {
-            $this->Cell(18, 5, $item->quantity, $border, 0, 'R', $fill);
-            $this->Cell(40, 5, $item->product()->first()->code, $border, 0, 'L', $fill);
-            $this->Cell(90, 5, substr($item->product()->first()->description, 0, 55), $border, 0, 'L', $fill);
-            $this->Cell(21, 5, number_format($item->price, 2), $border, 0, 'R', $fill);
-            $this->Cell(21, 5, number_format($item->total, 2), $border, 0, 'R', $fill);
+            $this->Cell(12, 5, $item->quantity, $border, 0, 'R', $fill);
+            $this->Cell(25, 5, $item->product()->first()->code, $border, 0, 'L', $fill);
+            $this->Cell(117, 5, substr($item->product()->first()->description, 0, 65), $border, 0, 'J', $fill);
+            $this->Cell(16, 5, number_format($item->price, 2), $border, 0, 'R', $fill);
+            $this->Cell(20, 5, number_format($item->total, 2), $border, 0, 'R', $fill);
             $this->Cell(0,  5, '', $border, 1);
 
             $fill = !$fill;
@@ -99,16 +107,24 @@ class PurchaseOrderPdf extends Fpdf {
         $this->Ln(1);
 
         $border = 'T';
-        $this->SetFont('Helvetica', 'B', 9);
-        $this->Cell(148, 5, '', false, 0);
-        $this->Cell(21, 5, 'Total: ', $border, 0, 'R');
-        $this->Cell(21, 5, number_format($order->total, 2), $border, 0, 'R');
+        $this->SetFont('Helvetica', 'B', 8);
+        $this->Cell(154, 5, '', false, 0);
+        $this->Cell(16, 5, 'Total: ', $border, 0, 'R');
+        $this->Cell(20, 5, number_format($order->total, 2), $border, 0, 'R');
         $this->Cell(0,  5, '', false, 1);
     }
 
     public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
         parent::Cell($w, $h, utf8_decode($txt), $border, $ln, $align, $fill, $link);
+    }
+
+
+    private function formatDate($date_time)
+    {
+        $dt = explode(' ', $date_time);
+        $date = explode('-', $dt[0]);
+        return implode("/", array_reverse($date)) .' '. $dt[1];
     }
 
 }
