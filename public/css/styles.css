@@ -55,6 +55,10 @@ table.cls-table thead tr {
 	background-color: #CCCCCC;
 }
 
+table.cls-table tbody tr {
+	background-color: #fcfcfc;
+}
+
 table.cls-table tbody td {
 	line-height: 16px;
 	height: 33px;
