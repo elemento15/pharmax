@@ -20,12 +20,21 @@ class VendorsController extends AppController
     protected $showJoins = [];
 
     // params needed for store/update
+    protected $saveFields = ['name','rfc','contact','phone','mobile','email','credit_conditions','address','comments'];
+    //protected $storeFields = [];
+    //protected $updateFields = [];
+
     protected $defaultNulls = ['rfc'];
     protected $formRules = [
-        'name'  => 'required',
+        'name'  => 'required|min:5',
         'email' => 'email|nullable',
-        'rfc' => 'required|unique:vendors,rfc,{{id}}|min:12|max:13',
+        'rfc' => 'nullable|unique:vendors,rfc,{{id}}|min:12|max:13',
     ];
 
     protected $allowDelete = true;
+    protected $allowUpdate = true;
+    protected $allowStore  = true;
+    protected $except = [];
+
+    protected $useTransactions = false;
 }

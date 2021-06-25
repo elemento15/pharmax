@@ -85,10 +85,10 @@ return [
     'mimes' => 'The :attribute must be a file of type: :values.',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
-        'numeric' => 'The :attribute must be at least :min.',
+        'numeric' => 'El campo :attribute debe ser al menos :min.',
         'file' => 'The :attribute must be at least :min kilobytes.',
-        'string' => 'The :attribute must be at least :min characters.',
-        'array' => 'The :attribute must have at least :min items.',
+        'string' => 'El campo :attribute debe contener al menos :min caracteres.',
+        'array' => 'El campo :attribute debe contener al menos :min elementos.',
     ],
     'multiple_of' => 'The :attribute must be a multiple of :value.',
     'not_in' => 'The selected :attribute is invalid.',
@@ -97,7 +97,7 @@ return [
     'password' => 'The password is incorrect.',
     'present' => 'The :attribute field must be present.',
     'regex' => 'The :attribute format is invalid.',
-    'required' => 'The :attribute field is required.',
+    'required' => 'El campo :attribute es requerido.',
     'required_if' => 'The :attribute field is required when :other is :value.',
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
     'required_with' => 'The :attribute field is required when :values is present.',
@@ -150,6 +150,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'description' => 'descripción',
+        'code' => 'código',
+        'name' => 'nombre',
+        'rfc' => 'RFC',
+    ],
 
 ];

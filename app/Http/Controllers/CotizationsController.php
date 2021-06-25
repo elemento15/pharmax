@@ -31,6 +31,11 @@ class CotizationsController extends AppController
     ];
 
     protected $allowDelete = false;
+    protected $allowUpdate = false;
+    protected $allowStore  = true;
+    protected $except = [];
+
+    protected $useTransactions = true;
 
 
     /**

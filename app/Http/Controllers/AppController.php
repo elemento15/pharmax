@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class AppController extends Controller
 {
+    protected $savedRecord;
+    protected $request;
+    protected $record;
+    protected $msgError = false;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -56,9 +62,17 @@ class AppController extends Controller
         }
 
         if ($request->page) {
-            $model = $model->paginate($limit);
+            if (isset($this->indexSelect)) {
+                $model = $model->select($this->indexSelect)->paginate($this->indexPaginate);
+            } else {
+                $model = $model->paginate($this->indexPaginate);
+            }
         } else {
-            $model = $model->get();
+            if (isset($this->indexSelect)) {
+                $model = $model->select($this->indexSelect)->get();
+            } else {
+                $model = $model->get();
+            }
         }
 
         return $model;
@@ -83,10 +97,20 @@ class AppController extends Controller
     {
         $this->request = $request;
         
+        if (! $this->allowStore) {
+            return Response::json(array('msg' => 'Modelo no permite insertar'), 500);
+        }
+
         $mainModel = $this->mainModel;
 
+        if (method_exists($this, 'beforeStore')) {
+            if (! $this->beforeStore()) {
+                return Response::json(array('msg' => $this->msgError), 500);
+            }
+        }
+
         foreach ($this->defaultNulls as $item) {
-            $request[$item] = ($request[$item] == '') ? null : $request[$item];
+            $this->request[$item] = ($this->request[$item] == '') ? null : $this->request[$item];
         }
 
         $rules = $this->parseFormRules(0);
@@ -95,9 +119,31 @@ class AppController extends Controller
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->errors()->all()), 422);
         } else {
+            $data = $this->getSavingFields($this->request->all(), 'store');
+
             try {
-                return $mainModel::create($request->all());
+                if ($this->useTransactions) {
+                    DB::beginTransaction();
+                }
+
+                $this->savedRecord = $mainModel::create($data);
+
+                if (method_exists($this, 'afterStore')) {
+                    if (! $this->afterStore()) {
+                        return Response::json(array('msg' => $this->msgError), 500);
+                    }
+                }
+
+                if ($this->useTransactions) {
+                    DB::commit();
+                }
+
+                return $this->savedRecord;
             } catch (Exception $e) {
+                if ($this->useTransactions) {
+                    DB::rollBack();
+                }
+
                 return Response::json(array('msg' => 'Error al guardar'), 500);
             }
         }
@@ -145,17 +191,29 @@ class AppController extends Controller
      */
     public function update($id, Request $request)
     {
-        $mainModel = $this->mainModel;
-        
-        foreach ($this->defaultNulls as $item) {
-            $request[$item] = ($request[$item] == '') ? null : $request[$item];
+        $this->request = $request;
+
+        if (! $this->allowUpdate) {
+            return Response::json(array('msg' => 'Modelo no permite actualizar'), 500);
         }
 
-        $rules = $this->formRules;
-        $validator = Validator::make($request->all(), $rules);
+        $mainModel = $this->mainModel;
+        
+        if (method_exists($this, 'beforeUpdate')) {
+            if (! $this->beforeUpdate()) {
+                return Response::json(array('msg' => $this->msgError), 500);
+            }
+        }
+
+        foreach ($this->defaultNulls as $item) {
+            $this->request[$item] = ($this->request[$item] == '') ? null : $this->request[$item];
+        }
+
+        $rules = $this->parseFormRules($id);
+        $validator = Validator::make($this->request->all(), $rules);
 
         if ($validator->fails()) {
-            return Response::json(array('msg' => 'Revise las validaciones'), 501);
+            return Response::json(array('errors' => $validator->errors()->all()), 422);
         } else {
             $record = $mainModel::find($id);
 
@@ -163,8 +221,19 @@ class AppController extends Controller
                 return Response::json(array('msg' => 'Registro no encontrado'), 500);
             }
 
+            $data = $this->getSavingFields($this->request->all(), 'update');
+
             try {
-                $record->fill($request->all())->save();
+                $record->fill($data)->save();
+                $this->savedRecord = $record;
+
+                if (method_exists($this, 'afterUpdate')) {
+                    if (! $this->afterUpdate()) {
+                        return Response::json(array('msg' => $this->msgError), 500);
+                    }
+                }
+
+                return $this->savedRecord;
             } catch (Exception $e) {
                 return Response::json(array('msg' => 'Error al guardar'), 500);
             }
@@ -187,13 +256,17 @@ class AppController extends Controller
         
         $mainModel = $this->mainModel;
         
-        $record = $mainModel::find($id);
-
-        if (! $record) {
+        if (! $this->record = $mainModel::find($id)) {
             return Response::json(array('msg' => 'Registro no encontrado'), 500);
         }
 
-        if (! $record->delete()) {
+        if (method_exists($this, 'beforeDestroy')) {
+            if (! $this->beforeDestroy()) {
+                return Response::json(array('msg' => $this->msgError), 500);
+            }
+        }
+
+        if (! $this->record->delete()) {
             return Response::json(array('msg' => 'Error al eliminar'), 500);
         }
     }
@@ -237,6 +310,36 @@ class AppController extends Controller
     }
 
 
+    protected function getSavingFields($request, $type)
+    {
+        $fields = false;
+        
+        if (isset($this->saveFields)) {
+            $fields = $this->saveFields;
+        } else {
+            if ($type == 'store' && isset($this->storeFields)) {
+                $fields = $this->storeFields;
+            }
+
+            if ($type == 'update' && isset($this->updateFields)) {
+                $fields = $this->updateFields;
+            }
+        }
+
+        return ($fields) ? $this->mapFields($request, $fields) : $request;
+    }
+
+    protected function mapFields($request, $fields)
+    {
+        $data = [];
+        
+        foreach ($fields as $field) {
+            $data[$field] = $request[$field];
+        }
+
+        return $data;
+    }
+
     protected function parseFormRules($id)
     {
         $rules = [];
@@ -247,4 +350,5 @@ class AppController extends Controller
 
         return $rules;
     }
+
 }

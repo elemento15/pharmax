@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Response;
 use Illuminate\Http\Request;
 use App\Services\ProductHistoryPdf;
-
 use App\Models\Product;
 use App\Models\Vendor;
 
@@ -23,14 +22,22 @@ class ProductsController extends AppController
     protected $showJoins = [];
 
     // params needed for store/update
-    protected $defaultNulls = ['code'];
+    protected $saveFields = ['code','sat_code','description','iva','comments'];
+    //protected $storeFields = [];
+    //protected $updateFields = [];
+    
+    protected $defaultNulls = [];
     protected $formRules = [
-        'description'  => 'required',
-        //'code' => 'nullable|unique:products,code,{{id}}',
-        //'sat_code' => 'nullable|unique:products,sat_code,{{id}}',
+        'description'  => 'required|unique:products,description,{{id}}|min:5',
+        'code' => 'nullable|unique:products,code,{{id}}|min:3',
     ];
 
     protected $allowDelete = true;
+    protected $allowUpdate = true;
+    protected $allowStore  = true;
+    protected $except = [];
+
+    protected $useTransactions = false;
 
 
     /**

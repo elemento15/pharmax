@@ -22,4 +22,9 @@ class PaymentTypesController extends AppController
     protected $formRules = [];
 
     protected $allowDelete = false;
+    protected $allowUpdate = false;
+    protected $allowStore  = false;
+    protected $except = [];
+
+    protected $useTransactions = false;
 }
