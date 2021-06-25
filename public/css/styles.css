@@ -15,8 +15,10 @@ nav.navbar ul a {
 }*/
 
 .navbar-default, 
-.navbar-brand {
-	color: #fff;
+.navbar-brand,
+.navbar-inverse,
+.navbar-nav > li > a {
+	color: #fff !important;
 }
 
 .cls-main-container {
