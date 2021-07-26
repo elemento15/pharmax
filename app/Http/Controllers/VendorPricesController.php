@@ -27,6 +27,11 @@ class VendorPricesController extends AppController
     ];
 
     protected $allowDelete = true;
+    protected $allowStore = true;
+    protected $allowUpdate = true;
+    protected $except = [];
+
+    protected $useTransactions = false;
 
 
     /**
