@@ -191,6 +191,7 @@ class PurchaseOrdersController extends AppController
     {
         $order = PurchaseOrder::find($id);
         $pdf = new PurchaseOrderPdf($order);
+        $pdf->AliasNbPages();
         return Response::make($pdf->Output('I', 'orden_'.$id.'.pdf'), 200, array('content-type' => 'application/pdf'));
     }
 

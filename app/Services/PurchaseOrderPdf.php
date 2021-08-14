@@ -44,29 +44,25 @@ class PurchaseOrderPdf extends Fpdf {
         $this->Ln(1);
 
         $this->Cell(16, 4, 'Proveedor:', $border, 0, '');
-        $this->Cell(96, 4, $vendor->name, $border, 0, '');
-        $this->SetFont('Arial', 'B', 7);
-        $this->Cell(0, 4, 'DATOS DE FACTURACIÓN:', $border, 1, '');
-        $this->SetFont('Arial', '', 8);
+        $this->Cell(96, 4, $vendor->name, $border, 1, '');
 
         $this->Cell(16, 4, 'Contacto:', $border, 0, '');
         $this->Cell(96, 4, $vendor->contact, $border, 0, '');
-        $this->Cell(0, 4, 'CIRUGIA PLASTICA DEL SIGLO XXI S.A.P.I. DE C.V.', $border, 1, '');
+        $this->SetFont('Arial', 'BU', 7);
+        $this->Cell(0, 4, 'DATOS DE FACTURACIÓN:', $border, 1, '');
+        $this->SetFont('Arial', '', 8);
 
         $this->Cell(16, 4, 'Teléfonos:', $border, 0, '');
         $this->Cell(96, 4, $vendor->phone.' / '.$vendor->mobile, $border, 0, '');
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(0, 4, 'R.F.C. CPS110412TP0', $border, 1, '');
+        $this->Cell(0, 4, 'R.F.C. '.($vendor->rfc ?: '-'), $border, 1, '');
         $this->SetFont('Arial', '', 8);
 
         $this->Cell(16, 4, 'Email:', $border, 0, '');
         $this->Cell(96, 4, $vendor->email, $border, 0, '');
-        $this->Cell(0, 4, 'AV. VERONA 7412 FRACC. VILLA VERONA', $border, 1, '');
+        $this->MultiCell(0, 4, $vendor->address, $border, '');
 
-        $this->Cell(112, 4, '', $border, 0, '');
-        $this->Cell(0, 4, 'C.P. 45019 ZAPOPAN, JALISCO.  TEL: 36077700', $border, 1, '');
-
-        $this->Ln(1);
+        $this->Ln(2);
         
 
         $this->SetFont('Arial', 'B', 8);
@@ -90,7 +86,7 @@ class PurchaseOrderPdf extends Fpdf {
         
         // print details
         $this->SetFont('Helvetica', '', 8);
-        $this->SetFillColor(230, 230, 230);
+        $this->SetFillColor(240, 240, 240);
         
         $details = $order->purchase_order_details()->get();
         foreach ($details as $item) {
@@ -112,6 +108,13 @@ class PurchaseOrderPdf extends Fpdf {
         $this->Cell(16, 5, 'Total: ', $border, 0, 'R');
         $this->Cell(20, 5, number_format($order->total, 2), $border, 0, 'R');
         $this->Cell(0,  5, '', false, 1);
+    }
+
+    public function Footer()
+    {
+        $this->SetY(-20);
+        $this->SetFont('Arial','I',7);
+        $this->Cell(0, 10, 'Página '.$this->PageNo()." de {nb}", 0, 0, 'C');
     }
 
     public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
