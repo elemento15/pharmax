@@ -74,7 +74,7 @@
 						<div class="col-xs-7">
 							<button class="btn btn-sm btn-primary" ng-click="save()">Guardar</button>
 							<a class="btn btn-sm btn-warning" href="#/vendors">Cerrar</a>
-							<a class="btn btn-sm btn-info" href="#/vendors-prices/{{data.id}}">Ver Precios</a>
+							<a class="btn btn-sm btn-info" href="#/vendors-prices/{{data.id}}" ng-show="data.id">Ver Precios</a>
 						</div>
 						<div class="col-xs-5">
 							<div class="text-danger text-right cls-balance">Saldo: {{ data.balance | currency }}</div>
